@@ -36,6 +36,7 @@ public class PhotoShot : MonoBehaviour
     IEnumerator TakePhoto()
     {
         Debug.Log("take photo");
+        yield break;
         #region Old version
         //_canvas.SetActive(false);
         //yield return new WaitForEndOfFrame();
@@ -52,7 +53,7 @@ public class PhotoShot : MonoBehaviour
 
 
 
-        SaveImageToGallery(photo, $"ar_app{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.png", $"some description");
+       // SaveImageToGallery(photo, $"ar_app{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.png", $"some description");
 
         _canvas.SetActive(true);
     }

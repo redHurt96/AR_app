@@ -475,6 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 2147230506}
   _snapshotButton: {fileID: 346446523}
+  _camera: {fileID: 0}
   _savingPath: 
 --- !u!1 &346446521
 GameObject:
