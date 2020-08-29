@@ -12,6 +12,7 @@ public class Tutorial : MonoBehaviour
     [Space]
     [SerializeField] private RectTransform _tutorialElementsParent;
     [SerializeField] private TutorialButton _slideButton;
+    [SerializeField] private TutorialButton _hideButton;
 
     [Space]
     [SerializeField] private AnimationCurve _slideCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -31,36 +32,28 @@ public class Tutorial : MonoBehaviour
 
     private enum TutorialState
     { 
-        FirstPage, SecondPage, Passed
+        Tutorial, Passed
     }
 
     private void Start()
     {
-        _slideButton.AddListener(OnTutorialButtonClick);
+        _slideButton.AddListener(() =>
+        {
+            if (_inTransitionState) return;
+            SlideTutorial();
+        });
+
+        _hideButton.AddListener(() =>
+        {
+            if (_inTransitionState) return;
+            HideTutorial();
+        });
     }
 
     private void OnDestroy()
     {
-        _slideButton.RemoveListener(OnTutorialButtonClick);
-    }
-
-    private void OnTutorialButtonClick()
-    {
-        if (_inTransitionState) return;
-
-        switch (_state)
-        {
-            case TutorialState.FirstPage:
-                SlideTutorial();
-                break;
-            case TutorialState.SecondPage:
-                HideTutorial();
-                break;
-            case TutorialState.Passed:
-                break;
-            default:
-                break;
-        }
+        _slideButton.RemoveAllListeners();
+        _hideButton.RemoveAllListeners();
     }
 
     private void SlideTutorial()

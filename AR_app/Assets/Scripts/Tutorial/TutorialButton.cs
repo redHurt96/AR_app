@@ -25,4 +25,9 @@ public class TutorialButton : MonoBehaviour
     {
         button?.onClick.RemoveListener(action);
     }
+
+    public void RemoveAllListeners()
+    {
+        button?.onClick.RemoveAllListeners();
+    }
 }
