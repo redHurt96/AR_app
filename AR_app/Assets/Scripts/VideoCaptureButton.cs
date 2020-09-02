@@ -1,5 +1,4 @@
-﻿using RockVR.Video;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -42,14 +41,12 @@ public class VideoCaptureButton : MonoBehaviour
             Debug.Log("Start capture");
             _isRecording = true;
             _camera.SetActive(true);
-            VideoCaptureCtrl.instance.StartCapture();
         }
         else
         {
             Debug.Log("Stop capture");
             _isRecording = false;
             _camera.SetActive(false);
-            VideoCaptureCtrl.instance.StopCapture();
         }
     }
 
@@ -61,35 +58,5 @@ public class VideoCaptureButton : MonoBehaviour
             _button.image.color = new Color(color.r, color.g, color.b, 1f);
         else if (buttonIsActive && Mathf.Abs(_button.image.color.a - 1) >= .1f)
             _button.image.color = new Color(color.r, color.g, color.b, _deselectedButtonAlpha);
-    }
-
-    private void Update()
-    {
-        if (VideoCaptureCtrl.instance == null || _button == null) return;
-
-        switch (VideoCaptureCtrl.instance.status)
-        {
-            case VideoCaptureCtrlBase.StatusType.NOT_START:
-                if (_button.image.sprite != _mainSprite)
-                    _button.image.sprite = _mainSprite;
-
-                SetAlpha(false);
-                break;
-            case VideoCaptureCtrlBase.StatusType.STARTED:
-                if (_button.image.sprite != _recordedSprite)
-                    _button.image.sprite = _recordedSprite;
-                break;
-            case VideoCaptureCtrlBase.StatusType.STOPPED:
-                if (_button.image.sprite != _mainSprite)
-                    _button.image.sprite = _mainSprite;
-
-                SetAlpha(false);
-                break;
-            case VideoCaptureCtrlBase.StatusType.FINISH:
-                SetAlpha(true);
-                break;
-            default:
-                break;
-        }
     }
 }
