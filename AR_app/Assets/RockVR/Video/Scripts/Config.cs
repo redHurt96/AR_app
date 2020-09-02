@@ -8,7 +8,7 @@ namespace RockVR.Video
     /// </summary>
     public class PathConfig
     {
-        public static string persistentDataPath = Application.persistentDataPath;
+        public static string persistentDataPath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         public static string streamingAssetsPath = Application.streamingAssetsPath;
         public static string myDocumentsPath = Environment.GetFolderPath(
             Environment.SpecialFolder.MyDocuments);

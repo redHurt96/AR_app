@@ -125,6 +125,10 @@ namespace RockVR.Video
             /// </summary>
             _1280x720,
             /// <summary>
+            /// 720p (720 x 1280) High Definition (HD).
+            /// </summary>
+            _720x1280,
+            /// <summary>
             /// 1080p (1920 x 1080) Full High Definition (FHD).
             /// </summary>
             _1920x1080,
@@ -275,6 +279,7 @@ namespace RockVR.Video
                         if (frameSize == FrameSizeType._720x480) { width = 720; }
                         if (frameSize == FrameSizeType._960x540) { width = 960; }
                         if (frameSize == FrameSizeType._1280x720) { width = 1280; }
+                        if (frameSize == FrameSizeType._720x1280) { width = 720; }
                         if (frameSize == FrameSizeType._1920x1080) { width = 1920; }
                         if (frameSize == FrameSizeType._2048x1080) { width = 2048; }
                         if (frameSize == FrameSizeType._3840x2160) { width = 3840; }
@@ -320,6 +325,7 @@ namespace RockVR.Video
                         frameSize == FrameSizeType._720x480) { height = 480; }
                         if (frameSize == FrameSizeType._960x540) { height = 540; }
                         if (frameSize == FrameSizeType._1280x720) { height = 720; }
+                        if (frameSize == FrameSizeType._720x1280) { height = 1280; }
                         if (frameSize == FrameSizeType._1920x1080 ||
                             frameSize == FrameSizeType._2048x1080) { height = 1080; }
                         if (frameSize == FrameSizeType._3840x2160 ||
@@ -408,7 +414,7 @@ namespace RockVR.Video
         /// <summary>
         /// Whether capture GUI.
         /// </summary>
-        public bool captureGUI = true;
+        public bool captureGUI = true;  
         /// <summary>
         /// The delta time of each frame.
         /// </summary>

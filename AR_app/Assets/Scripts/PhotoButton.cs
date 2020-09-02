@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,37 +72,35 @@ public class PhotoButton : SimpleSingleton<PhotoButton>
 
 
         //Save image to file
-#if UNITY_EDITOR || UNITY_ANDROID 
-            File.WriteAllBytes(path, imageBytes);
-            _pathText.text = path;
-#elif UNITY_IOS
-#endif
+        File.WriteAllBytes(path, imageBytes);
+        _pathText.text = path;
 
         ShowUselessObjects();
         //_blink.CreateBlink(.5f);
     }
 
-    private static string SaveImageToGallery(Texture2D picture, string title)
-    {
-        using (var mediaClass = new AndroidJavaClass(MediaStoreImagesMediaClass))
-        {
-            using (var contentResolver = Activity.Call<AndroidJavaObject>("getContentResolver"))
-            {
-                var image = Texture2DToAndroidBitmap(picture);
-                var imageUrl = mediaClass.CallStatic<string>("insertImage", contentResolver, image, title);
+    //from sfs asset
+
+    //private static string SaveImageToGallery(Texture2D picture, string title)
+    //{
+    //    using (var mediaClass = new AndroidJavaClass(MediaStoreImagesMediaClass))
+    //    {
+    //        using (var contentResolver = Activity.Call<AndroidJavaObject>("getContentResolver"))
+    //        {
+    //            var image = Texture2DToAndroidBitmap(picture);
+    //            var imageUrl = mediaClass.CallStatic<string>("insertImage", contentResolver, image, title);
                 
-                return imageUrl;
-            }
-        }
+    //            return imageUrl;
+    //        }
+    //    }
+    //}
 
-    }
-
-    public static AndroidJavaObject Texture2DToAndroidBitmap(Texture2D texture2D)
-    {
-        byte[] encoded = texture2D.EncodeToPNG();
-        using (var bf = new AndroidJavaClass("android.graphics.BitmapFactory"))
-        {
-            return bf.CallStatic<AndroidJavaObject>("decodeByteArray", encoded, 0, encoded.Length);
-        }
-    }
+    //public static AndroidJavaObject Texture2DToAndroidBitmap(Texture2D texture2D)
+    //{
+    //    byte[] encoded = texture2D.EncodeToPNG();
+    //    using (var bf = new AndroidJavaClass("android.graphics.BitmapFactory"))
+    //    {
+    //        return bf.CallStatic<AndroidJavaObject>("decodeByteArray", encoded, 0, encoded.Length);
+    //    }
+    //}
 }

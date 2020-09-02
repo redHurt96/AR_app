@@ -219,6 +219,9 @@ namespace RockVR.Video
             }
             else
             {
+                if (frameRenderTexture != null) 
+                    frameRenderTexture.Release();
+
                 // Create a rendertexture for video capture.
                 // Size it according to the desired video frame size.
                 frameRenderTexture = new RenderTexture(frameWidth, frameHeight, 24);
