@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +9,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class VideoCaptureButton : MonoBehaviour
 {
-    [SerializeField] private GameObject _camera;
+    [SerializeField] private AVProMovieCaptureFromCamera _capture;
 
-    [Space]
     [SerializeField] private Sprite _mainSprite;
     [SerializeField] private Sprite _recordedSprite;
 
@@ -19,6 +19,7 @@ public class VideoCaptureButton : MonoBehaviour
 
     private Button _button;
     private bool _isRecording = false;
+    private int _recorderAviHandler;
 
     private void Start()
     {
@@ -32,7 +33,7 @@ public class VideoCaptureButton : MonoBehaviour
         _button.onClick.AddListener(OnButtonClick);
 
     private void DetachListeners() =>
-        _button.onClick.RemoveListener(OnButtonClick);
+        _button?.onClick.RemoveListener(OnButtonClick);
 
     private void OnButtonClick()
     {
@@ -40,13 +41,13 @@ public class VideoCaptureButton : MonoBehaviour
         {
             Debug.Log("Start capture");
             _isRecording = true;
-            _camera.SetActive(true);
+            _capture.StartCapture();
         }
         else
         {
             Debug.Log("Stop capture");
             _isRecording = false;
-            _camera.SetActive(false);
+            _capture.StopCapture();
         }
     }
 
