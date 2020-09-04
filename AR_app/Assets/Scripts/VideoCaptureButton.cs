@@ -9,8 +9,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class VideoCaptureButton : MonoBehaviour
 {
-    [SerializeField] private AVProMovieCaptureFromCamera _capture;
-
     [SerializeField] private Sprite _mainSprite;
     [SerializeField] private Sprite _recordedSprite;
 
@@ -41,13 +39,13 @@ public class VideoCaptureButton : MonoBehaviour
         {
             Debug.Log("Start capture");
             _isRecording = true;
-            _capture.StartCapture();
+            _button.image.sprite = _recordedSprite;
         }
         else
         {
             Debug.Log("Stop capture");
             _isRecording = false;
-            _capture.StopCapture();
+            _button.image.sprite = _mainSprite;
         }
     }
 
