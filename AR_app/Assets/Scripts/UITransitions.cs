@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UITransitions : SimpleSingleton<UITransitions>
 {
-    public GameObject ev;
+    [SerializeField] private GameObject ev;
     public static GameObject EventSystem;
 
     public static void SlideTo(SlideUITransition uITransition) =>
