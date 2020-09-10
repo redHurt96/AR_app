@@ -72,7 +72,9 @@ public class PhotoButton : SimpleSingleton<PhotoButton>
 
 
         //Save image to file
-        File.WriteAllBytes(path, imageBytes);
+        //File.WriteAllBytes(path, imageBytes);
+
+        NativeGallery.SaveImageToGallery(imageBytes, Application.productName, fileName);
         _pathText.text = path;
 
         ShowUselessObjects();
