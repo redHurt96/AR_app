@@ -25,13 +25,12 @@ using Permission = UnityEngine.Android.Permission;
         [Header("Recording")]
         public int videoWidth = 1280;
         public int videoHeight = 720;
-        public bool recordMicrophone;
 
         private IMediaRecorder videoRecorder;
         private CameraInput cameraInput;
         public GameObject watermark;
         // private AudioInput audioInput;
-        private AudioSource microphoneSource;
+        //private AudioSource microphoneSource;
 
         private void Start()
         {
@@ -78,7 +77,7 @@ using Permission = UnityEngine.Android.Permission;
 #if UNITY_iOS
                     Handheld.PlayFullScreenMovie($"{prefix}{recordingPath}");
 
-                    var payload = new SavePayload("Dirol Minions"); // album name here
+                    var payload = new SavePayload("FormA"); // album name here
                     payload.AddMedia($"{recordingPath}");
                     payload.Commit();
 #endif

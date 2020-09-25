@@ -9,7 +9,7 @@ namespace NatCorder.Inputs {
     using System;
     using Clocks;
     using Internal;
-
+    /*
     /// <summary>
     /// Recorder input for recording audio frames from an `AudioListener` or `AudioSource`
     /// </summary>
@@ -77,5 +77,5 @@ namespace NatCorder.Inputs {
             private void OnAudioFilterRead (float[] data, int channels) => sampleBufferDelegate?.Invoke(data);
         }
         #endregion
-    }
+    }*/
 }

@@ -91,14 +91,14 @@ namespace NatCorder {
         /// <param name="timestamp">Frame timestamp in nanoseconds</param>
         [Doc(@"CommitFrame", @"CommitFrameDiscussion")]
         public void CommitFrame (IntPtr nativeBuffer, long timestamp) => recorder.CommitFrame(nativeBuffer, timestamp);
-
+        /*
         /// <summary>
         /// Commit an audio sample buffer for encoding
         /// </summary>
         /// <param name="sampleBuffer">Raw PCM audio sample buffer, interleaved by channel</param>
         /// <param name="timestamp">Sample buffer timestamp in nanoseconds</param>
         [Doc(@"CommitSamples", @"CommitSamplesDiscussion"), Code(@"RecordPCM")]
-        public void CommitSamples (float[] sampleBuffer, long timestamp) => recorder.CommitSamples(sampleBuffer, timestamp);
+        public void CommitSamples (float[] sampleBuffer, long timestamp) => recorder.CommitSamples(sampleBuffer, timestamp);*/
         #endregion
 
         private readonly IMediaRecorder recorder;

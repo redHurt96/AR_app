@@ -33,12 +33,12 @@ namespace NatCorder {
         /// <param name="nativeBuffer">Pixel buffer in native memory to commit</param>
         /// <param name="timestamp">Sample buffer timestamp in nanoseconds</param>
         void CommitFrame (IntPtr nativeBuffer, long timestamp);
-        
+        /*
         /// <summary>
         /// Commit an audio sample buffer for encoding
         /// </summary>
         /// <param name="sampleBuffer">Raw PCM audio sample buffer, interleaved by channel</param>
         /// <param name="timestamp">Sample buffer timestamp in nanoseconds</param>
-        void CommitSamples (float[] sampleBuffer, long timestamp);
+        void CommitSamples (float[] sampleBuffer, long timestamp);*/
     }
 }
