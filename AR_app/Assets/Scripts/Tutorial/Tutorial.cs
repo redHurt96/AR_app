@@ -13,6 +13,9 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private Image _staticFon;
     [SerializeField] private Image _menuFon;
     [Space]
+    [SerializeField] private RectTransform _topPanelToRelocate;
+    [SerializeField] private RectTransform _botPanelToRelocate;
+    [Space]
     [SerializeField] private RectTransform _tutorialElementsParent;
     [SerializeField] private GameObject _startScreen;
     [SerializeField] private GameObject _ARScreen;
@@ -35,6 +38,7 @@ public class Tutorial : MonoBehaviour
 
     [Space]
     [SerializeField] private CanvasScaler _canvasScaler;
+    [SerializeField] private RectTransform _canvasRT;
 
     [Space]
     [SerializeField] private float _slideTime = .5f;
@@ -119,7 +123,7 @@ public class Tutorial : MonoBehaviour
             GoToSite();
         });
 
-        
+        RescaleVerticalBlocksPositions();
 
     }
 
@@ -127,6 +131,14 @@ public class Tutorial : MonoBehaviour
     {
         _slideButton.RemoveAllListeners();
         _hideButton.RemoveAllListeners();
+    }
+
+    private void RescaleVerticalBlocksPositions()
+    {
+        _topPanelToRelocate.offsetMin = new Vector2(_topPanelToRelocate.offsetMin.x, -_canvasRT.rect.y * 2); //bot
+        _topPanelToRelocate.offsetMax = new Vector2(_topPanelToRelocate.offsetMax.x, -_canvasRT.rect.y * 2); //top
+        _botPanelToRelocate.offsetMin = new Vector2(_botPanelToRelocate.offsetMin.x, _canvasRT.rect.y * 2); //bot
+        _botPanelToRelocate.offsetMax = new Vector2(_botPanelToRelocate.offsetMax.x, _canvasRT.rect.y * 2); //top
     }
 
     private void GoToSite()
@@ -155,11 +167,11 @@ public class Tutorial : MonoBehaviour
     {
         _inTransitionState = true;
 
-        float movingDistance = _canvasScaler.referenceResolution.y;
+        float movingDistance = _canvasRT.rect.y * 2;
 
         UITransitions.SlideTo(new SlideUITransition(
             _tutorialElementsParent,
-            _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f),
+            _tutorialElementsParent.localPosition - new Vector3(0f, -movingDistance, 0f),
             _slideCurve,
             _slideTime,
             () => _inTransitionState = false
@@ -171,11 +183,11 @@ public class Tutorial : MonoBehaviour
     {
         _inTransitionState = true;
 
-        float movingDistance = _canvasScaler.referenceResolution.y;
+        float movingDistance = _canvasRT.rect.y * 2;
 
         UITransitions.SlideTo(new SlideUITransition(
             _tutorialElementsParent,
-            _tutorialElementsParent.localPosition - new Vector3(0f, -movingDistance, 0f),
+            _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f),
             _slideCurve,
             _slideTime,
             () => _inTransitionState = false
@@ -259,11 +271,11 @@ public class Tutorial : MonoBehaviour
     {
         _inTransitionState = true;
 
-        float movingDistance = _canvasScaler.referenceResolution.y;
+        float movingDistance = _canvasRT.rect.y * 2;
 
         UITransitions.SlideTo(new SlideUITransition(
             _tutorialElementsParent,
-            _tutorialElementsParent.localPosition - new Vector3(0f, -movingDistance, 0f),
+            _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f),
             _slideCurve,
             _slideTime,
             () => _inTransitionState = false
@@ -275,11 +287,11 @@ public class Tutorial : MonoBehaviour
     {
         _inTransitionState = true;
 
-        float movingDistance = _canvasScaler.referenceResolution.y;
+        float movingDistance = _canvasRT.rect.y * 2;
 
         UITransitions.SlideTo(new SlideUITransition(
             _tutorialElementsParent,
-            _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f),
+            _tutorialElementsParent.localPosition - new Vector3(0f, -movingDistance, 0f),
             _slideCurve,
             _slideTime,
             () => _inTransitionState = false
