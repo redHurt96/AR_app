@@ -9,7 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class TutorialButton : MonoBehaviour
 {
-    private Button button;
+    [SerializeField] private Button button;
 
     private void Start()
     {
@@ -18,6 +18,7 @@ public class TutorialButton : MonoBehaviour
 
     public void AddListener(UnityAction action)
     {
+        Debug.Log("AddListener" + (button == null), gameObject);
         button?.onClick.AddListener(action);
     }
 
