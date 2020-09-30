@@ -16,6 +16,9 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private RectTransform _topPanelToRelocate;
     [SerializeField] private RectTransform _botPanelToRelocate;
     [Space]
+    [SerializeField] private ScrollRect _projectsScrollRect;
+    [SerializeField] private ScrollRect _aboutScrollRect;
+    [Space]
     [SerializeField] private RectTransform _tutorialElementsParent;
     [SerializeField] private GameObject _startScreen;
     [SerializeField] private GameObject _ARScreen;
@@ -141,6 +144,29 @@ public class Tutorial : MonoBehaviour
         _botPanelToRelocate.offsetMax = new Vector2(_botPanelToRelocate.offsetMax.x, _canvasRT.rect.y * 2); //top
     }
 
+    public void BackToMenu()
+    {
+        _inTransitionState = true;
+
+        float movingDistance = _canvasScaler.referenceResolution.x;
+
+        _tutorialElementsParent.localPosition = _tutorialElementsParent.localPosition - new Vector3(movingDistance, 0f, 0f);
+        gameObject.SetActive(true);
+        _cameraUI.SetActive(false);
+
+        UITransitions.Fade(new FadeUITransition(
+            gameObject.GetComponent<CanvasGroup>(),
+            0f,
+            1f,
+            _fadeCurve,
+            _fadeTime,
+            () =>
+            {
+                _inTransitionState = false;
+            }
+            ));
+    }
+
     private void GoToSite()
     {
         Application.OpenURL("http://forma-decor.ru/");
@@ -174,7 +200,7 @@ public class Tutorial : MonoBehaviour
             _tutorialElementsParent.localPosition - new Vector3(0f, -movingDistance, 0f),
             _slideCurve,
             _slideTime,
-            () => _inTransitionState = false
+            () => {  _inTransitionState = false; }
             ));
 
         //_state++;
@@ -190,7 +216,7 @@ public class Tutorial : MonoBehaviour
             _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f),
             _slideCurve,
             _slideTime,
-            () => _inTransitionState = false
+            () => { _projectsScrollRect.normalizedPosition = Vector2.up; _inTransitionState = false; }
             ));
 
         //_state++;
@@ -225,7 +251,7 @@ public class Tutorial : MonoBehaviour
             _tutorialElementsParent.localPosition - new Vector3(-movingDistance, 0f, 0f),
             _slideCurve,
             _slideTime,
-            () => _inTransitionState = false
+            () => { _aboutScrollRect.normalizedPosition = Vector2.up; _inTransitionState = false; }
             ));
 
         //_state++;

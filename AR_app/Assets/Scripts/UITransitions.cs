@@ -56,7 +56,7 @@ public class UITransitions : SimpleSingleton<UITransitions>
             yield return null;
         }
 
-        uITransition.CanvasGroup.alpha = 0f;
+        uITransition.CanvasGroup.alpha = uITransition.EndAlpha;
 
         if (uITransition.withDisableTouch)
             EventSystem.SetActive(true);
