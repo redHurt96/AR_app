@@ -59,6 +59,8 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
+
         _slideButton.AddListener(() =>
         {
             if (_inTransitionState) return;
