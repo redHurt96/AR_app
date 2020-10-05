@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Vuforia;
+using Image = UnityEngine.UI.Image;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class Tutorial : MonoBehaviour
@@ -21,7 +23,8 @@ public class Tutorial : MonoBehaviour
     [Space]
     [SerializeField] private RectTransform _tutorialElementsParent;
     [SerializeField] private GameObject _startScreen;
-    [SerializeField] private GameObject _ARScreen;
+    [SerializeField] private GameObject _projectsScreen;
+    [SerializeField] private GameObject _cameraScreen;
     [SerializeField] private TutorialButton _slideButton;
     [SerializeField] private TutorialButton _hideButton;
     [SerializeField] private TutorialButton _projectsButton;
@@ -60,6 +63,7 @@ public class Tutorial : MonoBehaviour
     private void Start()
     {
         Application.targetFrameRate = 60;
+        //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = false;
 
         _slideButton.AddListener(() =>
         {
@@ -123,10 +127,7 @@ public class Tutorial : MonoBehaviour
             SlideContactsToMenu();
         });
 
-        _buttonToURL.AddListener(() =>
-        {
-            GoToSite();
-        });
+        _buttonToURL.AddListener(GoToSite);
 
         RescaleVerticalBlocksPositions();
 
@@ -140,21 +141,23 @@ public class Tutorial : MonoBehaviour
 
     private void RescaleVerticalBlocksPositions()
     {
-        _topPanelToRelocate.offsetMin = new Vector2(_topPanelToRelocate.offsetMin.x, -_canvasRT.rect.y * 2); //bot
-        _topPanelToRelocate.offsetMax = new Vector2(_topPanelToRelocate.offsetMax.x, -_canvasRT.rect.y * 2); //top
-        _botPanelToRelocate.offsetMin = new Vector2(_botPanelToRelocate.offsetMin.x, _canvasRT.rect.y * 2); //bot
-        _botPanelToRelocate.offsetMax = new Vector2(_botPanelToRelocate.offsetMax.x, _canvasRT.rect.y * 2); //top
+        var rect = _canvasRT.rect;
+        _topPanelToRelocate.offsetMin = new Vector2(_topPanelToRelocate.offsetMin.x, -rect.y * 2); //bot
+        _topPanelToRelocate.offsetMax = new Vector2(_topPanelToRelocate.offsetMax.x, -rect.y * 2); //top
+        _botPanelToRelocate.offsetMin = new Vector2(_botPanelToRelocate.offsetMin.x, rect.y * 2); //bot
+        _botPanelToRelocate.offsetMax = new Vector2(_botPanelToRelocate.offsetMax.x, rect.y * 2); //top
     }
 
     public void BackToMenu()
     {
         _inTransitionState = true;
 
-        float movingDistance = _canvasScaler.referenceResolution.x;
+        float movingDistance = _canvasRT.rect.y * 2;
 
-        _tutorialElementsParent.localPosition = _tutorialElementsParent.localPosition - new Vector3(movingDistance, 0f, 0f);
+        _tutorialElementsParent.localPosition = _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f);
         gameObject.SetActive(true);
         _cameraUI.SetActive(false);
+        
 
         UITransitions.Fade(new FadeUITransition(
             gameObject.GetComponent<CanvasGroup>(),
@@ -164,6 +167,8 @@ public class Tutorial : MonoBehaviour
             _fadeTime,
             () =>
             {
+                _cameraScreen.SetActive(false);
+                //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = false;
                 _inTransitionState = false;
             }
             ));
@@ -185,13 +190,14 @@ public class Tutorial : MonoBehaviour
             _tutorialElementsParent.localPosition - new Vector3(movingDistance, 0f, 0f),
             _slideCurve,
             _slideTime,
-            () => { _startScreen.SetActive(false); _ARScreen.SetActive(true); _staticFon.enabled = false; _menuFon.enabled = true; _inTransitionState = false;  }
+            () => { _startScreen.SetActive(false); 
+                _projectsScreen.SetActive(true); _staticFon.enabled = false; _menuFon.enabled = true; _inTransitionState = false;  }
             ));
 
         _state++;
     }
 
-    private void SlideToProjects()
+    private void SlideToARTutorial()
     {
         _inTransitionState = true;
 
@@ -207,7 +213,7 @@ public class Tutorial : MonoBehaviour
 
         //_state++;
     }
-    private void SlideProjectsToMenu()
+    private void SlideARToMenu()
     {
         _inTransitionState = true;
 
@@ -260,7 +266,7 @@ public class Tutorial : MonoBehaviour
     }
 
 
-    private void SlideToARTutorial()
+    private void SlideToProjects()
     {
         _inTransitionState = true;
 
@@ -276,7 +282,7 @@ public class Tutorial : MonoBehaviour
 
         //_state++;
     }
-    private void SlideARToMenu()
+    private void SlideProjectsToMenu()
     {
         _inTransitionState = true;
 
@@ -333,6 +339,7 @@ public class Tutorial : MonoBehaviour
     private void HideTutorial()
     {
         _inTransitionState = true;
+        _cameraScreen.SetActive(true);
 
         UITransitions.Fade(new FadeUITransition(
             GetComponent<CanvasGroup>(),
@@ -345,6 +352,7 @@ public class Tutorial : MonoBehaviour
                     _inTransitionState = false;
                     gameObject.SetActive(false);
                     _cameraUI.SetActive(true);
+                    //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = true;
                 }
             ));
 
