@@ -14,6 +14,9 @@ public class Tutorial : MonoBehaviour
     [Space]
     [SerializeField] private Image _staticFon;
     [SerializeField] private Image _menuFon;
+    [Space] 
+    [SerializeField] private GameObject _snowPS;
+    [SerializeField] private GameObject _hearhPS;
     [Space]
     [SerializeField] private RectTransform _topPanelToRelocate;
     [SerializeField] private RectTransform _botPanelToRelocate;
@@ -37,6 +40,9 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private TutorialButton _backToMenuContactsButton;
 
     [SerializeField] private TutorialButton _buttonToURL;
+    [SerializeField] private TutorialButton _buttonToDownloadTags;
+    [SerializeField] private TutorialButton _buttonSnow;
+    [SerializeField] private TutorialButton _buttonHearth;
 
     [Space]
     [SerializeField] private AnimationCurve _slideCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -128,6 +134,9 @@ public class Tutorial : MonoBehaviour
         });
 
         _buttonToURL.AddListener(GoToSite);
+        _buttonToDownloadTags.AddListener(DownloadTags);
+        _buttonSnow.AddListener(SwitchSnowState);
+        _buttonHearth.AddListener(SwitchHearhState);
 
         RescaleVerticalBlocksPositions();
 
@@ -137,6 +146,16 @@ public class Tutorial : MonoBehaviour
     {
         _slideButton.RemoveAllListeners();
         _hideButton.RemoveAllListeners();
+    }
+
+    private void SwitchSnowState()
+    {
+        _snowPS.SetActive(!_snowPS.activeSelf);
+    }
+
+    private void SwitchHearhState()
+    {
+        _hearhPS.SetActive(!_hearhPS.activeSelf);
     }
 
     private void RescaleVerticalBlocksPositions()
@@ -177,6 +196,11 @@ public class Tutorial : MonoBehaviour
     private void GoToSite()
     {
         Application.OpenURL("http://forma-decor.ru/");
+    }
+    
+    private void DownloadTags()
+    {
+        Application.OpenURL("https://formadecor.ru/metki/");
     }
 
     private void SlideTutorial()
