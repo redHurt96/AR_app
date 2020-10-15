@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR.WSA.Input;
+//using UnityEngine.XR.WSA.Input;
 using Vuforia;
 using Image = UnityEngine.UI.Image;
 
@@ -69,7 +69,7 @@ public class Tutorial : MonoBehaviour
                              private bool               _isPhone                     = true;
             [SerializeField] private GameObject[]       _phoneBlocks;
             [SerializeField] private GameObject[]       _tabletBlocks;
-            [SerializeField] private AnimatorController _buttonAnimController;
+            //[SerializeField] private AnimatorController _buttonAnimController;
 
     private bool _inTransitionState = false;
 
@@ -161,7 +161,7 @@ public class Tutorial : MonoBehaviour
         SetSize(_bigButton, new Vector2(_bigButton.sizeDelta.x, _parentOfBigButton.rect.height * (_isPhone ? _bigButtonPercentSizeOfPhone : _bigButtonPercentSizeOfPads)));
         //_parentOfBigButton.GetComponent<VerticalLayoutGroup>().enabled = false;
         //_bigButton.GetComponent<Animator>().enabled = true;
-        _bigButton.GetChild(0).gameObject.AddComponent<Animator>().runtimeAnimatorController = _buttonAnimController;
+        //_bigButton.GetChild(0).gameObject.AddComponent<Animator>().runtimeAnimatorController = _buttonAnimController;
 
         foreach (var curr in _phoneBlocks) curr.SetActive(_isPhone);
         foreach (var curr in _tabletBlocks) curr.SetActive(!_isPhone);
@@ -225,6 +225,7 @@ public class Tutorial : MonoBehaviour
         _tutorialElementsParent.localPosition = _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f);
         gameObject.SetActive(true);
         _cameraUI.SetActive(false);
+        _staticFon.enabled = true;
         
 
         UITransitions.Fade(new FadeUITransition(
@@ -264,7 +265,7 @@ public class Tutorial : MonoBehaviour
             _slideCurve,
             _slideTime,
             () => { _startScreen.SetActive(false); 
-                _projectsScreen.SetActive(true); _staticFon.enabled = false; _menuFon.enabled = true; _inTransitionState = false;  }
+                _projectsScreen.SetActive(true);/* _staticFon.enabled = false; _menuFon.enabled = true;*/ _inTransitionState = false;  }
             ));
 
         _state++;
@@ -297,7 +298,7 @@ public class Tutorial : MonoBehaviour
             _tutorialElementsParent.localPosition - new Vector3(0f, movingDistance, 0f),
             _slideCurve,
             _slideTime,
-            () => { _projectsScrollRect.normalizedPosition = Vector2.up; _inTransitionState = false; }
+            () => { _projectsScrollRect.normalizedPosition = Vector2.up;  _inTransitionState = false; }
             ));
 
         //_state++;
@@ -428,6 +429,7 @@ public class Tutorial : MonoBehaviour
                     _inTransitionState = false;
                     gameObject.SetActive(false);
                     _cameraUI.SetActive(true);
+                    _staticFon.enabled = false;
                     //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = true;
                 }
             ));
