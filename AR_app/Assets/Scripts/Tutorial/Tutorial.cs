@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.WSA.Input;
 using Vuforia;
 using Image = UnityEngine.UI.Image;
 
@@ -58,6 +60,16 @@ public class Tutorial : MonoBehaviour
 
     [Space]
     [SerializeField] private GameObject _cameraUI;
+
+    [Space] [SerializeField] private RectTransform      _bigButton;
+            [SerializeField] private RectTransform      _parentOfBigButton;
+            [SerializeField] private float              _bigButtonPercentSizeOfPhone = 0.8f;
+            [SerializeField] private float              _bigButtonPercentSizeOfPads  = 0.7f;
+
+                             private bool               _isPhone                     = true;
+            [SerializeField] private GameObject[]       _phoneBlocks;
+            [SerializeField] private GameObject[]       _tabletBlocks;
+            [SerializeField] private AnimatorController _buttonAnimController;
 
     private bool _inTransitionState = false;
 
@@ -139,7 +151,44 @@ public class Tutorial : MonoBehaviour
         _buttonHearth.AddListener(SwitchHearhState);
 
         RescaleVerticalBlocksPositions();
+        float ratio = (float)Screen.height / (float)Screen.width;
+        _isPhone = ratio > 1.55f;
+        ResizeInterfaceToRatio();
+    }
 
+    private void ResizeInterfaceToRatio()
+    {
+        SetSize(_bigButton, new Vector2(_bigButton.sizeDelta.x, _parentOfBigButton.rect.height * (_isPhone ? _bigButtonPercentSizeOfPhone : _bigButtonPercentSizeOfPads)));
+        //_parentOfBigButton.GetComponent<VerticalLayoutGroup>().enabled = false;
+        //_bigButton.GetComponent<Animator>().enabled = true;
+        _bigButton.GetChild(0).gameObject.AddComponent<Animator>().runtimeAnimatorController = _buttonAnimController;
+
+        foreach (var curr in _phoneBlocks) curr.SetActive(_isPhone);
+        foreach (var curr in _tabletBlocks) curr.SetActive(!_isPhone);
+    }
+    
+    private void SetSize(RectTransform self, Vector2 size)
+    {
+        Vector2 oldSize = self.rect.size;
+        Vector2 deltaSize = size - oldSize;
+ 
+        self.offsetMin = self.offsetMin - new Vector2(
+            deltaSize.x * self.pivot.x,
+            deltaSize.y * self.pivot.y);
+        self.offsetMax = self.offsetMax + new Vector2(
+            deltaSize.x * (1f - self.pivot.x),
+            deltaSize.y * (1f - self.pivot.y));
+    }
+
+    public void SendEmail()
+    {
+        string url = string.Format("mailto:{0}?subject={1}&body={2}", "info@formadecor.ru", WWW.EscapeURL("Тема"), WWW.EscapeURL("Текст сообщения"));
+        Application.OpenURL(url);
+    }
+
+    public void CallPhone()
+    {
+        Application.OpenURL("tel://+78005054702");
     }
 
     private void OnDestroy()
@@ -317,8 +366,11 @@ public class Tutorial : MonoBehaviour
             _tutorialElementsParent.localPosition - new Vector3(movingDistance, 0f, 0f),
             _slideCurve,
             _slideTime,
-            () => _inTransitionState = false
-            ));
+            () =>
+            {
+                _projectsScrollRect.normalizedPosition = Vector2.up;
+                _inTransitionState = false;
+            }));
 
         //_state++;
     }
