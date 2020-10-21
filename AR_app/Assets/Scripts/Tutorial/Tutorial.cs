@@ -32,6 +32,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private GameObject _cameraScreen;
     [SerializeField] private TutorialButton _slideButton;
     [SerializeField] private TutorialButton _hideButton;
+    [SerializeField] private TutorialButton _hideButton2;
     [SerializeField] private TutorialButton _projectsButton;
     [SerializeField] private TutorialButton _backToMenuProjectButton;
     [SerializeField] private TutorialButton _aboutButton;
@@ -43,6 +44,7 @@ public class Tutorial : MonoBehaviour
 
     [SerializeField] private TutorialButton _buttonToURL;
     [SerializeField] private TutorialButton _buttonToDownloadTags;
+    [SerializeField] private TutorialButton _buttonToDownloadTags2;
     [SerializeField] private TutorialButton _buttonSnow;
     [SerializeField] private TutorialButton _buttonHearth;
 
@@ -90,6 +92,11 @@ public class Tutorial : MonoBehaviour
         });
 
         _hideButton.AddListener(() =>
+        {
+            if (_inTransitionState) return;
+            HideTutorial();
+        });
+        _hideButton2.AddListener(() =>
         {
             if (_inTransitionState) return;
             HideTutorial();
@@ -147,6 +154,7 @@ public class Tutorial : MonoBehaviour
 
         _buttonToURL.AddListener(GoToSite);
         _buttonToDownloadTags.AddListener(DownloadTags);
+        _buttonToDownloadTags2.AddListener(DownloadTags);
         _buttonSnow.AddListener(SwitchSnowState);
         _buttonHearth.AddListener(SwitchHearhState);
 
