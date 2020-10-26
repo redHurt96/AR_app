@@ -1,67 +1,49 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-//using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
-//using UnityEngine.XR.WSA.Input;
-using Vuforia;
 using Image = UnityEngine.UI.Image;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class Tutorial : MonoBehaviour
 {
-    [SerializeField] private TutorialState _state;
+    [Space] [SerializeField] private Image              _staticFon;
+    [Space] [SerializeField] private RectTransform      _topPanelToRelocate;
+            [SerializeField] private RectTransform      _botPanelToRelocate;
+    [Space] [SerializeField] private ScrollRect         _projectsScrollRect;
+            [SerializeField] private ScrollRect         _aboutScrollRect;
+    
+    [Space] [SerializeField] private RectTransform      _tutorialElementsParent;
+            [SerializeField] private GameObject         _startScreen;
+            [SerializeField] private GameObject         _projectsScreen;
+            [SerializeField] private GameObject         _cameraScreen;
+            [SerializeField] private TutorialButton     _slideButton;
+            [SerializeField] private TutorialButton     _hideButton;
+            [SerializeField] private TutorialButton      _hideButton2;
+            [SerializeField] private TutorialButton     _projectsButton;
+            [SerializeField] private TutorialButton     _backToMenuProjectButton;
+            [SerializeField] private TutorialButton     _aboutButton;
+            [SerializeField] private TutorialButton     _backToMenuAboutButton;
+            [SerializeField] private TutorialButton     _ARButton;
+            [SerializeField] private TutorialButton     _backToMenuARButton;
+            [SerializeField] private TutorialButton     _contactsButton;
+            [SerializeField] private TutorialButton     _backToMenuContactsButton;
 
-    [Space]
-    [SerializeField] private Image _staticFon;
-    [SerializeField] private Image _menuFon;
-    [Space] 
-    [SerializeField] private GameObject _snowPS;
-    [SerializeField] private GameObject _hearhPS;
-    [Space]
-    [SerializeField] private RectTransform _topPanelToRelocate;
-    [SerializeField] private RectTransform _botPanelToRelocate;
-    [Space]
-    [SerializeField] private ScrollRect _projectsScrollRect;
-    [SerializeField] private ScrollRect _aboutScrollRect;
-    [Space]
-    [SerializeField] private RectTransform _tutorialElementsParent;
-    [SerializeField] private GameObject _startScreen;
-    [SerializeField] private GameObject _projectsScreen;
-    [SerializeField] private GameObject _cameraScreen;
-    [SerializeField] private TutorialButton _slideButton;
-    [SerializeField] private TutorialButton _hideButton;
-    [SerializeField] private TutorialButton _hideButton2;
-    [SerializeField] private TutorialButton _projectsButton;
-    [SerializeField] private TutorialButton _backToMenuProjectButton;
-    [SerializeField] private TutorialButton _aboutButton;
-    [SerializeField] private TutorialButton _backToMenuAboutButton;
-    [SerializeField] private TutorialButton _ARButton;
-    [SerializeField] private TutorialButton _backToMenuARButton;
-    [SerializeField] private TutorialButton _contactsButton;
-    [SerializeField] private TutorialButton _backToMenuContactsButton;
+            [SerializeField] private TutorialButton     _buttonToURL;
+            [SerializeField] private TutorialButton     _buttonToDownloadTags;
+            [SerializeField] private TutorialButton     _buttonToDownloadTags2;
 
-    [SerializeField] private TutorialButton _buttonToURL;
-    [SerializeField] private TutorialButton _buttonToDownloadTags;
-    [SerializeField] private TutorialButton _buttonToDownloadTags2;
-    [SerializeField] private TutorialButton _buttonSnow;
-    [SerializeField] private TutorialButton _buttonHearth;
+    [Space] [SerializeField] private AnimationCurve     _slideCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+            [SerializeField] private AnimationCurve     _fadeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-    [Space]
-    [SerializeField] private AnimationCurve _slideCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-    [SerializeField] private AnimationCurve _fadeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [Space] [SerializeField] private CanvasScaler       _canvasScaler;
+            [SerializeField] private RectTransform      _canvasRT;
 
-    [Space]
-    [SerializeField] private CanvasScaler _canvasScaler;
-    [SerializeField] private RectTransform _canvasRT;
+    [Space] [SerializeField] private float              _slideTime = .5f;
+            [SerializeField] private float              _fadeTime = .5f;
 
-    [Space]
-    [SerializeField] private float _slideTime = .5f;
-    [SerializeField] private float _fadeTime = .5f;
-
-    [Space]
-    [SerializeField] private GameObject _cameraUI;
+    [Space] [SerializeField] private GameObject         _cameraUI;
 
     [Space] [SerializeField] private RectTransform      _bigButton;
             [SerializeField] private RectTransform      _parentOfBigButton;
@@ -71,19 +53,13 @@ public class Tutorial : MonoBehaviour
                              private bool               _isPhone                     = true;
             [SerializeField] private GameObject[]       _phoneBlocks;
             [SerializeField] private GameObject[]       _tabletBlocks;
-            //[SerializeField] private AnimatorController _buttonAnimController;
 
     private bool _inTransitionState = false;
 
-    private enum TutorialState
-    { 
-        Tutorial, Passed
-    }
 
     private void Start()
     {
         Application.targetFrameRate = 60;
-        //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = false;
 
         _slideButton.AddListener(() =>
         {
@@ -155,8 +131,6 @@ public class Tutorial : MonoBehaviour
         _buttonToURL.AddListener(GoToSite);
         _buttonToDownloadTags.AddListener(DownloadTags);
         _buttonToDownloadTags2.AddListener(DownloadTags);
-        _buttonSnow.AddListener(SwitchSnowState);
-        _buttonHearth.AddListener(SwitchHearhState);
 
         RescaleVerticalBlocksPositions();
         float ratio = (float)Screen.height / (float)Screen.width;
@@ -167,9 +141,6 @@ public class Tutorial : MonoBehaviour
     private void ResizeInterfaceToRatio()
     {
         SetSize(_bigButton, new Vector2(_bigButton.sizeDelta.x, _parentOfBigButton.rect.height * (_isPhone ? _bigButtonPercentSizeOfPhone : _bigButtonPercentSizeOfPads)));
-        //_parentOfBigButton.GetComponent<VerticalLayoutGroup>().enabled = false;
-        //_bigButton.GetComponent<Animator>().enabled = true;
-        //_bigButton.GetChild(0).gameObject.AddComponent<Animator>().runtimeAnimatorController = _buttonAnimController;
 
         foreach (var curr in _phoneBlocks) curr.SetActive(_isPhone);
         foreach (var curr in _tabletBlocks) curr.SetActive(!_isPhone);
@@ -205,16 +176,6 @@ public class Tutorial : MonoBehaviour
         _hideButton.RemoveAllListeners();
     }
 
-    private void SwitchSnowState()
-    {
-        _snowPS.SetActive(!_snowPS.activeSelf);
-    }
-
-    private void SwitchHearhState()
-    {
-        _hearhPS.SetActive(!_hearhPS.activeSelf);
-    }
-
     private void RescaleVerticalBlocksPositions()
     {
         var rect = _canvasRT.rect;
@@ -245,7 +206,6 @@ public class Tutorial : MonoBehaviour
             () =>
             {
                 _cameraScreen.SetActive(false);
-                //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = false;
                 _inTransitionState = false;
             }
             ));
@@ -273,10 +233,8 @@ public class Tutorial : MonoBehaviour
             _slideCurve,
             _slideTime,
             () => { _startScreen.SetActive(false); 
-                _projectsScreen.SetActive(true);/* _staticFon.enabled = false; _menuFon.enabled = true;*/ _inTransitionState = false;  }
+                _projectsScreen.SetActive(true); _inTransitionState = false;  }
             ));
-
-        _state++;
     }
 
     private void SlideToARTutorial()
@@ -292,8 +250,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => {  _inTransitionState = false; }
             ));
-
-        //_state++;
     }
     private void SlideARToMenu()
     {
@@ -308,8 +264,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => { _projectsScrollRect.normalizedPosition = Vector2.up;  _inTransitionState = false; }
             ));
-
-        //_state++;
     }
 
 
@@ -327,8 +281,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => _inTransitionState = false
             ));
-
-        //_state++;
     }
     private void SlideAboutToMenu()
     {
@@ -343,8 +295,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => { _aboutScrollRect.normalizedPosition = Vector2.up; _inTransitionState = false; }
             ));
-
-        //_state++;
     }
 
 
@@ -361,8 +311,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => _inTransitionState = false
             ));
-
-        //_state++;
     }
     private void SlideProjectsToMenu()
     {
@@ -380,8 +328,6 @@ public class Tutorial : MonoBehaviour
                 _projectsScrollRect.normalizedPosition = Vector2.up;
                 _inTransitionState = false;
             }));
-
-        //_state++;
     }
 
 
@@ -399,8 +345,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => _inTransitionState = false
             ));
-
-        //_state++;
     }
     private void SlideContactsToMenu()
     {
@@ -415,8 +359,6 @@ public class Tutorial : MonoBehaviour
             _slideTime,
             () => _inTransitionState = false
             ));
-
-        //_state++;
     }
 
 
@@ -438,10 +380,7 @@ public class Tutorial : MonoBehaviour
                     gameObject.SetActive(false);
                     _cameraUI.SetActive(true);
                     _staticFon.enabled = false;
-                    //VuforiaConfiguration.Instance.VideoBackground.VideoBackgroundEnabled = true;
                 }
             ));
-
-        _state++;
     }
 }
